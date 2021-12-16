@@ -1,0 +1,47 @@
+# Maintainer: Butui Hu <hot123tea123@gmail.com>
+
+_py=cp310
+_modules=(
+  itk-core
+  itk-filtering
+  itk-io
+  itk-numerics
+  itk-registration
+  itk-segmentation
+)
+pkgname=python-itk
+pkgver=5.3rc2.post1
+pkgrel=1
+pkgdesc='An open-source toolkit for multidimensional image analysis (Python binding)'
+arch=('x86_64')
+url='https://itk.org/'
+license=('Apache')
+depends=(
+  python-numpy
+  python-xarray
+)
+makedepends=(
+  python-pip
+)
+
+source=(
+  "https://files.pythonhosted.org/packages/61/3c/716ec46569b718ecb211c864185a0a197b24798982062defae1c0ce541bc/itk-5.3rc2.post1-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl"
+)
+
+for _name in ${_modules[@]}; do
+  source+=("https://files.pythonhosted.org/packages/${_py}/${_name::1}/${_name}/${_name/-/_}-${pkgver}-${_py}-${_py}-manylinux_2_17_x86_64.manylinux2014_x86_64.whl")
+done
+
+sha512sums=('5169814c0ff20dbc03f7b922709c0bfd82dc94b1de359b88c75262255996e72adafa4f2de237c466964b0292ee05b41a3e50b6495281ee3c025baac456163662'
+            '527951270f5972829102e02752a58f1fb6cf3784192c8d0de3f5a0c97c7a440657acf31461b2d024e49e8db078790213fa2e3de88ca9e0f7a70cc0ff4b6bb253'
+            '7f95d7c49199b1a41a0b69043013037e2296238ebb38cc95dc209399003e1594cf09207d7fe8aa8285983d045a45cb9de799e1af55735cd54bdf7c2bb9ed51a6'
+            '74b17534207e44873807509e7370a51407ff19207330b73357bc8f8d17f8eec486e2da873d700204c1e7d2daa5bbd9d120191a747dfeff6fc98d88ea1ed15e65'
+            '7dbf4acef82cfc3247a6ca884fb380675cf8eafdd5719876acc1b37659749054e2c37fbc49e994cbbf4b10377d91223de1f572f6d60b02c8e1f02cef6f82236f'
+            '79a5e9c9ac45bf20967d8c75c45f30b91b421d316e558dc4b505583d32e1bf9bb241155ed46f3e860ec8ae09e4db62d858322cb44a78dfc49ce934ebe173ea02'
+            '087606c184167d921d47a1923cefd86b350a9f2e12ae9bab05ecf6a0893c0ea58e021ee6e474ab5fe433a0c0730e5fca406567e1115c4110b7b9f4bc8a03f486')
+
+package() {
+	PIP_CONFIG_FILE=/dev/null pip install --isolated --root="${pkgdir}" --ignore-installed --no-deps *.whl
+	python -O -m compileall "${pkgdir}"
+}
+# vim:set ts=2 sw=2 et:

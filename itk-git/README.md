@@ -1,0 +1,1 @@
+* `PKGBUILD.build-from-source` builds `itk-git` and `python-itk-git` from the source using the GitHub source [ITK](https://github.com/InsightSoftwareConsortium/ITK/). It takes about 2 hours to build these two packages.
